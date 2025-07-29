@@ -43,12 +43,12 @@ const ProductCard = ({
   const originalPrice = isSale ? price : null;
 
   return (
-    <Link to={`/product/${id}`} className="product-card block">
+    <Link to={`/product/${id}`} className="product-card group block">
       <div className="relative overflow-hidden aspect-square mb-4">
         <img 
           src={image} 
           alt={name}
-          className="product-image"
+          className="product-image group-hover:scale-105"
         />
         {hoverImage && (
           <img 

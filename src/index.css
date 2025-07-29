@@ -147,11 +147,11 @@
   
   /* Product Card */
   .product-card {
-    @apply group cursor-pointer transition-all duration-500;
+    @apply cursor-pointer transition-all duration-500;
   }
   
   .product-image {
-    @apply w-full aspect-square object-cover transition-all duration-500 group-hover:scale-105;
+    @apply w-full aspect-square object-cover transition-all duration-500;
   }
   
   /* Typography */
