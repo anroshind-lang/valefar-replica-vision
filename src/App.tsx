@@ -3,7 +3,17 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
+import Navigation from "./components/Navigation";
+import Footer from "./components/Footer";
+import AudioPlayer from "./components/AudioPlayer";
+import Home from "./pages/Home";
+import Shop from "./pages/Shop";
+import ProductDetail from "./pages/ProductDetail";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import FAQ from "./pages/FAQ";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -14,11 +24,25 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <div className="min-h-screen bg-background">
+          <Navigation />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/privacy" element={<div className="pt-20 p-8"><h1>Privacy Policy</h1><p>Privacy policy content...</p></div>} />
+            <Route path="/terms" element={<div className="pt-20 p-8"><h1>Terms & Conditions</h1><p>Terms content...</p></div>} />
+            <Route path="/returns" element={<div className="pt-20 p-8"><h1>Returns & Exchanges</h1><p>Returns policy...</p></div>} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <Footer />
+          <AudioPlayer />
+        </div>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
