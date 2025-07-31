@@ -17,16 +17,32 @@ const Footer = () => {
               Crafted with precision and designed for those who demand excellence.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              <a 
+                href="#" 
+                onClick={(e) => { e.preventDefault(); alert('Follow us on Instagram @valefar (Social media integration coming soon!)'); }}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              <a 
+                href="#" 
+                onClick={(e) => { e.preventDefault(); alert('Follow us on Twitter @valefar (Social media integration coming soon!)'); }}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              <a 
+                href="#" 
+                onClick={(e) => { e.preventDefault(); alert('Like us on Facebook (Social media integration coming soon!)'); }}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              <a 
+                href="#" 
+                onClick={(e) => { e.preventDefault(); alert('Subscribe to our YouTube channel (Social media integration coming soon!)'); }}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
                 <Youtube className="h-5 w-5" />
               </a>
             </div>
@@ -61,8 +77,8 @@ const Footer = () => {
             <h4 className="font-medium text-sm tracking-wide uppercase">Company</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link to="/about" className="hover:text-foreground transition-colors">About Us</Link></li>
-              <li><Link to="/careers" className="hover:text-foreground transition-colors">Careers</Link></li>
-              <li><Link to="/press" className="hover:text-foreground transition-colors">Press</Link></li>
+              <li><a href="#careers" onClick={(e) => { e.preventDefault(); alert('Careers page coming soon!'); }} className="hover:text-foreground transition-colors cursor-pointer">Careers</a></li>
+              <li><a href="#press" onClick={(e) => { e.preventDefault(); alert('Press page coming soon!'); }} className="hover:text-foreground transition-colors cursor-pointer">Press</a></li>
               <li><Link to="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link></li>
               <li><Link to="/terms" className="hover:text-foreground transition-colors">Terms & Conditions</Link></li>
             </ul>
@@ -84,7 +100,13 @@ const Footer = () => {
                 placeholder="Enter your email"
                 className="flex-1 px-4 py-2 text-sm border border-border focus:outline-none focus:ring-2 focus:ring-ring"
               />
-              <button className="px-6 py-2 bg-primary text-primary-foreground text-sm font-medium hover:bg-hover transition-colors">
+              <button 
+                onClick={() => {
+                  // TODO: Implement newsletter subscription
+                  alert('Thank you for subscribing to our newsletter!');
+                }}
+                className="px-6 py-2 bg-primary text-primary-foreground text-sm font-medium hover:bg-hover transition-colors"
+              >
                 Subscribe
               </button>
             </div>

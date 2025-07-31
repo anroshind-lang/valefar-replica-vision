@@ -241,11 +241,33 @@ const ProductDetail = () => {
               </button>
               
               <div className="flex space-x-4">
-                <button className="flex-1 btn-outline inline-flex items-center justify-center space-x-2">
+                <button 
+                  onClick={() => {
+                    // TODO: Implement wishlist functionality
+                    alert('Added to wishlist! (Wishlist feature will be implemented)');
+                  }}
+                  className="flex-1 btn-outline inline-flex items-center justify-center space-x-2"
+                >
                   <Heart className="h-4 w-4" />
                   <span>Add to Wishlist</span>
                 </button>
-                <button className="btn-outline inline-flex items-center space-x-2">
+                <button 
+                  onClick={() => {
+                    // Share functionality
+                    if (navigator.share) {
+                      navigator.share({
+                        title: product.name,
+                        text: `Check out this ${product.name} from Valefar`,
+                        url: window.location.href,
+                      });
+                    } else {
+                      // Fallback - copy to clipboard
+                      navigator.clipboard.writeText(window.location.href);
+                      alert('Product link copied to clipboard!');
+                    }
+                  }}
+                  className="btn-outline inline-flex items-center space-x-2"
+                >
                   <Share2 className="h-4 w-4" />
                   <span>Share</span>
                 </button>

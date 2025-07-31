@@ -192,22 +192,33 @@ const Shop = () => {
               {/* Price Range */}
               <div>
                 <h3 className="font-medium mb-4">Price Range</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm">₹{priceRange[0].toLocaleString()}</span>
-                    <span className="text-sm">-</span>
-                    <span className="text-sm">₹{priceRange[1].toLocaleString()}</span>
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm">₹{priceRange[0].toLocaleString()}</span>
+                      <span className="text-sm">-</span>
+                      <span className="text-sm">₹{priceRange[1].toLocaleString()}</span>
+                    </div>
+                    <div className="space-y-2">
+                      <input
+                        type="range"
+                        min="0"
+                        max="50000"
+                        step="1000"
+                        value={priceRange[0]}
+                        onChange={(e) => setPriceRange([parseInt(e.target.value), priceRange[1]])}
+                        className="w-full"
+                      />
+                      <input
+                        type="range"
+                        min="0"
+                        max="50000"
+                        step="1000"
+                        value={priceRange[1]}
+                        onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
+                        className="w-full"
+                      />
+                    </div>
                   </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="50000"
-                    step="1000"
-                    value={priceRange[1]}
-                    onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                    className="w-full"
-                  />
-                </div>
               </div>
             </div>
           </div>

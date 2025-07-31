@@ -99,7 +99,13 @@ const Home = () => {
                 <span>Discover Collection</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
-              <button className="btn-outline text-white border-white hover:bg-white hover:text-black inline-flex items-center space-x-2">
+              <button 
+                onClick={() => {
+                  // TODO: Add video modal or redirect to video page
+                  alert('Watch Film feature will be implemented with video modal');
+                }}
+                className="btn-outline text-white border-white hover:bg-white hover:text-black inline-flex items-center space-x-2"
+              >
                 <Play className="h-4 w-4" />
                 <span>Watch Film</span>
               </button>
@@ -203,7 +209,13 @@ const Home = () => {
               placeholder="Enter your email"
               className="flex-1 px-6 py-4 text-base border border-border focus:outline-none focus:ring-2 focus:ring-ring"
             />
-            <button className="btn-luxury">
+            <button 
+              onClick={() => {
+                // TODO: Implement newsletter subscription
+                alert('Thank you for subscribing! (Newsletter feature will be implemented)');
+              }}
+              className="btn-luxury"
+            >
               Subscribe
             </button>
           </div>
