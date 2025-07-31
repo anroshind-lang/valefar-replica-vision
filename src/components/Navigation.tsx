@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Search, ShoppingBag, User } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
+import SearchModal from './SearchModal';
 
 const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { getCartItemsCount, openCart } = useCart();
   const location = useLocation();
-  const { cartItems } = useCart();
 
-  const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const cartItemCount = getCartItemsCount();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,20 +71,37 @@ const Navigation = () => {
 
             {/* Icons */}
             <div className="flex items-center space-x-4">
-              <button className="hidden sm:block" aria-label="Search">
+              {/* Search Icon */}
+              <button 
+                onClick={() => setIsSearchOpen(true)}
+                className="p-2 hover:bg-muted transition-colors"
+                aria-label="Search products"
+              >
                 <Search className="h-5 w-5" />
               </button>
-              <button aria-label="Account">
+
+              {/* User Icon */}
+              <Link 
+                to="/login"
+                className="p-2 hover:bg-muted transition-colors"
+                aria-label="Login/Profile"
+              >
                 <User className="h-5 w-5" />
-              </button>
-              <Link to="/cart" className="relative" aria-label="Shopping cart">
+              </Link>
+
+              {/* Cart Icon */}
+              <button 
+                onClick={openCart}
+                className="relative p-2 hover:bg-muted transition-colors"
+                aria-label="Shopping cart"
+              >
                 <ShoppingBag className="h-5 w-5" />
                 {cartItemCount > 0 && (
-                  <span className="cart-badge">
+                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
                     {cartItemCount}
                   </span>
                 )}
-              </Link>
+              </button>
             </div>
           </div>
         </div>
@@ -142,6 +161,12 @@ const Navigation = () => {
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
+
+      {/* Search Modal */}
+      <SearchModal 
+        isOpen={isSearchOpen} 
+        onClose={() => setIsSearchOpen(false)} 
+      />
     </>
   );
 };

@@ -15,6 +15,8 @@ import Checkout from "./pages/Checkout";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import FAQ from "./pages/FAQ";
+import Login from "./pages/Login";
+import ThankYou from "./pages/ThankYou";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +38,8 @@ const App = () => (
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/faq" element={<FAQ />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/thank-you" element={<ThankYou />} />
             <Route path="/privacy" element={<div className="pt-20 p-8"><h1>Privacy Policy</h1><p>Privacy policy content...</p></div>} />
             <Route path="/terms" element={<div className="pt-20 p-8"><h1>Terms & Conditions</h1><p>Terms content...</p></div>} />
             <Route path="/returns" element={<div className="pt-20 p-8"><h1>Returns & Exchanges</h1><p>Returns policy...</p></div>} />

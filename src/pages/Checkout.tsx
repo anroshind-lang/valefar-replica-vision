@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { useCart } from '@/hooks/useCart';
 import { CreditCard, Truck, Shield, ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { initiateRazorpayPayment, generateOrderId } from '@/services/razorpayService';
+import { sendOrderConfirmationEmail } from '@/services/emailService';
 
 const Checkout = () => {
-  const { cartItems, getCartTotal } = useCart();
+  const { cartItems, getCartTotal, clearCart } = useCart();
+  const navigate = useNavigate();
+  const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     firstName: '',
@@ -29,10 +33,77 @@ const Checkout = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle checkout submission
-    alert('Checkout functionality would be implemented here with payment gateway integration');
+    
+    if (isProcessing) return;
+    
+    // Validate form
+    const requiredFields = ['email', 'firstName', 'lastName', 'address', 'city', 'state', 'pincode', 'phone'];
+    const missingFields = requiredFields.filter(field => !formData[field as keyof typeof formData]);
+    
+    if (missingFields.length > 0) {
+      alert(`Please fill in all required fields: ${missingFields.join(', ')}`);
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      const orderId = generateOrderId();
+      const amount = total;
+
+      // Initiate Razorpay payment
+      await initiateRazorpayPayment(
+        {
+          amount,
+          currency: 'INR',
+          orderId,
+          customerName: `${formData.firstName} ${formData.lastName}`,
+          customerEmail: formData.email,
+          customerPhone: formData.phone,
+          customerAddress: `${formData.address}, ${formData.city}, ${formData.state} - ${formData.pincode}`,
+        },
+        async (response) => {
+          // Payment successful
+          console.log('Payment successful:', response);
+          
+          try {
+            // Send order confirmation email
+            await sendOrderConfirmationEmail({
+              customerName: `${formData.firstName} ${formData.lastName}`,
+              customerEmail: formData.email,
+              orderId: response.razorpay_order_id || orderId,
+              items: cartItems.map(item => ({
+                name: item.name,
+                quantity: item.quantity,
+                price: item.price * item.quantity,
+              })),
+              totalAmount: amount,
+              shippingAddress: `${formData.address}, ${formData.city}, ${formData.state} - ${formData.pincode}`,
+              phone: formData.phone,
+            });
+          } catch (emailError) {
+            console.error('Error sending email:', emailError);
+            // Continue even if email fails
+          }
+
+          // Clear cart and redirect to thank you page
+          clearCart();
+          navigate(`/thank-you?orderId=${response.razorpay_order_id || orderId}&amount=${amount}`);
+        },
+        (error) => {
+          // Payment failed
+          console.error('Payment failed:', error);
+          alert('Payment failed. Please try again.');
+          setIsProcessing(false);
+        }
+      );
+    } catch (error) {
+      console.error('Error initiating payment:', error);
+      alert('Error initiating payment. Please try again.');
+      setIsProcessing(false);
+    }
   };
 
   if (cartItems.length === 0) {
@@ -214,9 +285,10 @@ const Checkout = () => {
               {/* Complete Order Button */}
               <button
                 type="submit"
-                className="w-full btn-luxury text-lg py-4"
+                disabled={isProcessing}
+                className="w-full btn-luxury text-lg py-4 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Complete Order
+                {isProcessing ? 'Processing...' : 'Complete Order'}
               </button>
             </form>
           </div>
