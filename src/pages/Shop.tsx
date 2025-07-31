@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Filter, Grid, List, SlidersHorizontal } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
 import productHoodie from '@/assets/product-hoodie-1.jpg';

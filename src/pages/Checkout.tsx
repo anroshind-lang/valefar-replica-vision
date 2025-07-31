@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useCart } from '@/hooks/useCart';
 import { CreditCard, Truck, Shield, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
