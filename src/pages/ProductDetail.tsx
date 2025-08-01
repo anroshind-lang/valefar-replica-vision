@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowRight, Heart, Share2, Star, Truck, RotateCcw } from 'lucide-react';
-import { useCart } from '@/hooks/useCart';
+import { useCartContext } from '@/contexts/CartContext';
 import { useWishlist } from '@/hooks/useWishlist';
 import ProductCard from '@/components/ProductCard';
 import SizeChart from '@/components/SizeChart';
@@ -14,7 +14,7 @@ import productShoes from '@/assets/product-shoes-1.jpg';
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const { addToCart } = useCart();
+  const { addToCart } = useCartContext();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');

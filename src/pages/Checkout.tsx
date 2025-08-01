@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useCart } from '@/hooks/useCart';
+import { useCartContext } from '@/contexts/CartContext';
 import { CreditCard, Truck, Shield, ArrowLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { initiateRazorpayPayment, generateOrderId } from '@/services/razorpayService';
 import { sendOrderConfirmationEmail } from '@/services/emailService';
 
 const Checkout = () => {
-  const { cartItems, getCartTotal, clearCart } = useCart();
+  const { cartItems, getCartTotal, clearCart } = useCartContext();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({

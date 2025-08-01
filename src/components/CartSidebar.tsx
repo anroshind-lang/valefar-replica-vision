@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { X, Plus, Minus, ShoppingBag } from 'lucide-react';
-import { useCart } from '@/hooks/useCart';
+import { useCartContext } from '@/contexts/CartContext';
 
 const CartSidebar = () => {
   const { 
@@ -11,7 +11,7 @@ const CartSidebar = () => {
     updateQuantity, 
     removeFromCart, 
     getCartTotal 
-  } = useCart();
+  } = useCartContext();
 
   if (!isCartOpen) return null;
 

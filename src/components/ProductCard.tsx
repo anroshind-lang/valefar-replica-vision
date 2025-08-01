@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingBag } from 'lucide-react';
-import { useCart } from '@/hooks/useCart';
+import { useCartContext } from '@/contexts/CartContext';
 
 interface ProductCardProps {
   id: string;
@@ -26,7 +26,7 @@ const ProductCard = ({
   isSale, 
   salePrice 
 }: ProductCardProps) => {
-  const { addToCart } = useCart();
+  const { addToCart } = useCartContext();
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();

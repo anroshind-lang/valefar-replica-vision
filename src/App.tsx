@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { CartProvider } from "@/contexts/CartContext";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import AudioPlayer from "./components/AudioPlayer";
@@ -28,7 +29,8 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <div className="min-h-screen bg-background">
+        <CartProvider>
+          <div className="min-h-screen bg-background">
           <Navigation />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -49,7 +51,8 @@ const App = () => (
           <Footer />
           <AudioPlayer />
           <CartSidebar />
-        </div>
+          </div>
+        </CartProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
