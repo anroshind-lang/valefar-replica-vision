@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <footer className="bg-background border-t border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
           <div className="space-y-4">
             <h3 className="text-2xl font-playfair font-bold">VALEFAR</h3>
@@ -48,17 +48,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Shop */}
-          <div className="space-y-4">
-            <h4 className="font-medium text-sm tracking-wide uppercase">Shop</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link to="/shop" className="hover:text-foreground transition-colors">All Products</Link></li>
-              <li><Link to="/shop?category=tops" className="hover:text-foreground transition-colors">Tops</Link></li>
-              <li><Link to="/shop?category=bottoms" className="hover:text-foreground transition-colors">Bottoms</Link></li>
-              <li><Link to="/shop?category=outerwear" className="hover:text-foreground transition-colors">Outerwear</Link></li>
-              <li><Link to="/shop?category=accessories" className="hover:text-foreground transition-colors">Accessories</Link></li>
-            </ul>
-          </div>
 
           {/* Support */}
           <div className="space-y-4">
@@ -78,7 +67,7 @@ const Footer = () => {
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link to="/about" className="hover:text-foreground transition-colors">About Us</Link></li>
               <li><a href="#careers" onClick={(e) => { e.preventDefault(); alert('Careers page coming soon!'); }} className="hover:text-foreground transition-colors cursor-pointer">Careers</a></li>
-              <li><a href="#press" onClick={(e) => { e.preventDefault(); alert('Press page coming soon!'); }} className="hover:text-foreground transition-colors cursor-pointer">Press</a></li>
+              
               <li><Link to="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link></li>
               <li><Link to="/terms" className="hover:text-foreground transition-colors">Terms & Conditions</Link></li>
             </ul>

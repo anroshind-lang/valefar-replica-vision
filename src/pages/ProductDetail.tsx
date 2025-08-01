@@ -1,46 +1,177 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowRight, Heart, Share2, Star, Truck, Shield, RotateCcw } from 'lucide-react';
+import { ArrowRight, Heart, Share2, Star, Truck, RotateCcw } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
+import { useWishlist } from '@/hooks/useWishlist';
 import ProductCard from '@/components/ProductCard';
+import SizeChart from '@/components/SizeChart';
 import productHoodie from '@/assets/product-hoodie-1.jpg';
 import productTshirt from '@/assets/product-tshirt-1.jpg';
 import productJacket from '@/assets/product-jacket-1.jpg';
 import productPants from '@/assets/product-pants-1.jpg';
+import productAccessories from '@/assets/product-accessories-1.jpg';
+import productShoes from '@/assets/product-shoes-1.jpg';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const { addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
-  // Mock product data - in real app, fetch based on id
-  const product = {
-    id: 'luxury-hoodie-1',
-    name: 'Premium Oversized Hoodie',
-    price: 8999,
-    description: 'Crafted from premium organic cotton fleece, this oversized hoodie embodies the perfect blend of comfort and luxury. Features include a kangaroo pocket, adjustable drawstring hood, and ribbed cuffs for a contemporary streetwear aesthetic.',
-    images: [productHoodie, productTshirt, productJacket],
-    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    colors: [
-      { name: 'Black', value: '#000000' },
-      { name: 'Grey', value: '#808080' },
-      { name: 'Navy', value: '#000080' },
-    ],
-    features: [
-      '100% organic cotton fleece',
-      'Heavyweight 450gsm fabric',
-      'Pre-shrunk and enzyme washed',
-      'Reinforced seams for durability',
-      'Unisex sizing',
-    ],
-    category: 'Hoodies',
-    rating: 4.8,
-    reviewCount: 127,
-    isNew: true,
+  // Dynamic product data based on ID
+  const getProductData = (productId: string) => {
+    const products = {
+      'luxury-hoodie-1': {
+        id: 'luxury-hoodie-1',
+        name: 'Premium Oversized Hoodie',
+        price: 8999,
+        description: 'Crafted from premium organic cotton fleece, this oversized hoodie embodies the perfect blend of comfort and luxury. Features include a kangaroo pocket, adjustable drawstring hood, and ribbed cuffs for a contemporary streetwear aesthetic.',
+        images: [productHoodie, productTshirt, productJacket],
+        sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+        colors: [
+          { name: 'Black', value: '#000000' },
+          { name: 'Grey', value: '#808080' },
+          { name: 'Navy', value: '#000080' },
+        ],
+        features: [
+          '100% organic cotton fleece',
+          'Heavyweight 450gsm fabric',
+          'Pre-shrunk and enzyme washed',
+          'Reinforced seams for durability',
+          'Unisex sizing',
+        ],
+        category: 'Hoodies',
+        rating: 4.8,
+        reviewCount: 127,
+        isNew: true,
+      },
+      'essential-tee-1': {
+        id: 'essential-tee-1',
+        name: 'Essential Cotton Tee',
+        price: 3999,
+        description: 'A wardrobe essential crafted from 100% premium cotton. Designed for maximum comfort and versatility, this tee features a relaxed fit that works for any occasion.',
+        images: [productTshirt, productHoodie, productJacket],
+        sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+        colors: [
+          { name: 'White', value: '#ffffff' },
+          { name: 'Black', value: '#000000' },
+          { name: 'Grey', value: '#808080' },
+        ],
+        features: [
+          '100% premium cotton',
+          'Pre-shrunk fabric',
+          'Reinforced neck seams',
+          'Comfortable fit',
+          'Machine washable',
+        ],
+        category: 'T-Shirts',
+        rating: 4.6,
+        reviewCount: 89,
+        isNew: false,
+      },
+      'denim-jacket-1': {
+        id: 'denim-jacket-1',
+        name: 'Vintage Denim Jacket',
+        price: 12999,
+        description: 'A classic denim jacket with vintage-inspired details. Made from heavyweight denim that ages beautifully over time. Perfect for layering and adding texture to any outfit.',
+        images: [productJacket, productTshirt, productHoodie],
+        sizes: ['S', 'M', 'L', 'XL'],
+        colors: [
+          { name: 'Blue', value: '#4169E1' },
+          { name: 'Black', value: '#000000' },
+        ],
+        features: [
+          'Heavyweight denim',
+          'Vintage wash',
+          'Classic cut',
+          'Metal hardware',
+          'Multiple pockets',
+        ],
+        category: 'Jackets',
+        rating: 4.7,
+        reviewCount: 156,
+        isNew: false,
+      },
+      'cargo-pants-1': {
+        id: 'cargo-pants-1',
+        name: 'Technical Cargo Pants',
+        price: 7999,
+        description: 'Modern cargo pants with technical fabric and contemporary fit. Features multiple pockets for functionality without compromising on style.',
+        images: [productPants, productTshirt, productJacket],
+        sizes: ['28', '30', '32', '34', '36'],
+        colors: [
+          { name: 'Black', value: '#000000' },
+          { name: 'Olive', value: '#808000' },
+          { name: 'Khaki', value: '#F0E68C' },
+        ],
+        features: [
+          'Technical fabric',
+          'Water-resistant',
+          'Multiple pockets',
+          'Adjustable fit',
+          'Reinforced knees',
+        ],
+        category: 'Pants',
+        rating: 4.5,
+        reviewCount: 73,
+        isNew: false,
+      },
+      'luxury-accessories-1': {
+        id: 'luxury-accessories-1',
+        name: 'Premium Chain Set',
+        price: 4999,
+        description: 'Handcrafted premium chain set featuring elegant design and superior quality. Perfect for adding a luxury touch to any outfit.',
+        images: [productAccessories, productTshirt, productHoodie],
+        sizes: ['One Size'],
+        colors: [
+          { name: 'Gold', value: '#FFD700' },
+          { name: 'Silver', value: '#C0C0C0' },
+        ],
+        features: [
+          'Handcrafted design',
+          'Premium materials',
+          'Tarnish resistant',
+          'Adjustable length',
+          'Gift packaging included',
+        ],
+        category: 'Accessories',
+        rating: 4.8,
+        reviewCount: 91,
+        isNew: true,
+      },
+      'designer-sneakers-1': {
+        id: 'designer-sneakers-1',
+        name: 'High-Top Sneakers',
+        price: 15999,
+        description: 'Premium high-top sneakers combining street style with luxury comfort. Crafted with attention to detail for the modern urban lifestyle.',
+        images: [productShoes, productTshirt, productJacket],
+        sizes: ['7', '8', '9', '10', '11', '12'],
+        colors: [
+          { name: 'White', value: '#ffffff' },
+          { name: 'Black', value: '#000000' },
+          { name: 'Grey', value: '#808080' },
+        ],
+        features: [
+          'Premium leather upper',
+          'Cushioned sole',
+          'Breathable lining',
+          'Anti-slip outsole',
+          'Classic high-top design',
+        ],
+        category: 'Shoes',
+        rating: 4.7,
+        reviewCount: 134,
+        isNew: false,
+      },
+    };
+    
+    return products[productId as keyof typeof products] || products['luxury-hoodie-1'];
   };
+
+  const product = getProductData(id || 'luxury-hoodie-1');
 
   const relatedProducts = [
     {
@@ -173,7 +304,10 @@ const ProductDetail = () => {
 
             {/* Size Selection */}
             <div>
-              <h3 className="font-medium mb-3">Size</h3>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-medium">Size</h3>
+                <SizeChart />
+              </div>
               <div className="flex flex-wrap gap-2">
                 {product.sizes.map((size) => (
                   <button
@@ -243,13 +377,26 @@ const ProductDetail = () => {
               <div className="flex space-x-4">
                 <button 
                   onClick={() => {
-                    // TODO: Implement wishlist functionality
-                    alert('Added to wishlist! (Wishlist feature will be implemented)');
+                    const isAdded = toggleWishlist({
+                      id: product.id,
+                      name: product.name,
+                      price: product.price,
+                      image: product.images[0],
+                      category: product.category,
+                    });
+                    
+                    if (isAdded) {
+                      alert('Added to wishlist!');
+                    } else {
+                      alert('Removed from wishlist!');
+                    }
                   }}
-                  className="flex-1 btn-outline inline-flex items-center justify-center space-x-2"
+                  className={`flex-1 btn-outline inline-flex items-center justify-center space-x-2 ${
+                    isInWishlist(product.id) ? 'bg-red-50 text-red-600 border-red-200' : ''
+                  }`}
                 >
-                  <Heart className="h-4 w-4" />
-                  <span>Add to Wishlist</span>
+                  <Heart className={`h-4 w-4 ${isInWishlist(product.id) ? 'fill-current' : ''}`} />
+                  <span>{isInWishlist(product.id) ? 'Remove from Wishlist' : 'Add to Wishlist'}</span>
                 </button>
                 <button 
                   onClick={() => {
@@ -288,7 +435,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Services */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6 border-t border-border">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-6 border-t border-border">
               <div className="flex items-center space-x-3 text-sm">
                 <Truck className="h-5 w-5 text-primary" />
                 <span>Free shipping over ₹5,000</span>
@@ -296,10 +443,6 @@ const ProductDetail = () => {
               <div className="flex items-center space-x-3 text-sm">
                 <RotateCcw className="h-5 w-5 text-primary" />
                 <span>30-day returns</span>
-              </div>
-              <div className="flex items-center space-x-3 text-sm">
-                <Shield className="h-5 w-5 text-primary" />
-                <span>2-year warranty</span>
               </div>
             </div>
           </div>

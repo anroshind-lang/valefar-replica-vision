@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import AudioPlayer from "./components/AudioPlayer";
+import CartSidebar from "./components/CartSidebar";
 import Home from "./pages/Home";
 import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
@@ -47,6 +48,7 @@ const App = () => (
           </Routes>
           <Footer />
           <AudioPlayer />
+          <CartSidebar />
         </div>
       </BrowserRouter>
     </TooltipProvider>
