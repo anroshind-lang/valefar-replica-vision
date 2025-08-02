@@ -42,7 +42,7 @@ const Navigation = () => {
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Mobile menu button */}
             <button
-              className="md:hidden"
+              className="md:hidden p-2 -ml-2"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open menu"
             >
@@ -115,6 +115,7 @@ const Navigation = () => {
             <button
               onClick={() => setIsMobileMenuOpen(false)}
               aria-label="Close menu"
+              className="p-2 -mr-2"
             >
               <X className="h-6 w-6" />
             </button>
@@ -126,7 +127,7 @@ const Navigation = () => {
                 <Link
                   key={link.name}
                   to={link.path}
-                  className="block text-lg font-medium"
+                  className="block text-lg font-medium py-3 nav-mobile"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {link.name}

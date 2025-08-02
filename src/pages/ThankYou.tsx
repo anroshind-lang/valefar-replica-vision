@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { CheckCircle, ArrowRight, Home } from 'lucide-react';
+import { CheckCircle, ArrowRight, Home, Mail, MailX } from 'lucide-react';
 
 const ThankYou = () => {
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get('orderId') || 'VALEFAR' + Date.now();
   const amount = searchParams.get('amount') || '0';
+  const emailSent = searchParams.get('emailSent');
 
   useEffect(() => {
     // Clear cart after successful payment
@@ -38,11 +39,30 @@ const ThankYou = () => {
                 <span className="font-semibold text-green-600">Confirmed</span>
               </div>
             </div>
+            
+            {/* Email Confirmation Status */}
+            <div className="mt-4 p-3 border border-border rounded-lg">
+              {emailSent === 'true' ? (
+                <div className="flex items-center space-x-2 text-green-600">
+                  <Mail className="h-4 w-4" />
+                  <span className="text-sm">Order confirmation email sent successfully!</span>
+                </div>
+              ) : emailSent === 'false' ? (
+                <div className="flex items-center space-x-2 text-orange-600">
+                  <MailX className="h-4 w-4" />
+                  <span className="text-sm">Order confirmed, but email delivery failed. Contact us for confirmation.</span>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-2 text-muted-foreground">
+                  <Mail className="h-4 w-4" />
+                  <span className="text-sm">Order confirmation email is being sent...</span>
+                </div>
+              )}
+            </div>
           </div>
 
           <p className="text-muted-foreground mb-8">
-            A confirmation email has been sent to your registered email address with all the order details.
-            We'll notify you once your order is shipped.
+            We'll notify you once your order is shipped and ready for delivery.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

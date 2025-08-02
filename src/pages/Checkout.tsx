@@ -70,7 +70,7 @@ const Checkout = () => {
           
           try {
             // Send order confirmation email
-            await sendOrderConfirmationEmail({
+            const emailResult = await sendOrderConfirmationEmail({
               customerName: `${formData.firstName} ${formData.lastName}`,
               customerEmail: formData.email,
               orderId: response.razorpay_order_id || orderId,
@@ -83,14 +83,18 @@ const Checkout = () => {
               shippingAddress: `${formData.address}, ${formData.city}, ${formData.state} - ${formData.pincode}`,
               phone: formData.phone,
             });
+            
+            // Clear cart and redirect to thank you page with email status
+            clearCart();
+            navigate(`/thank-you?orderId=${response.razorpay_order_id || orderId}&amount=${amount}&emailSent=${emailResult.success}`);
           } catch (emailError) {
             console.error('Error sending email:', emailError);
-            // Continue even if email fails
+            // Clear cart and redirect even if email fails
+            clearCart();
+            navigate(`/thank-you?orderId=${response.razorpay_order_id || orderId}&amount=${amount}&emailSent=false`);
+          } finally {
+            setIsProcessing(false);
           }
-
-          // Clear cart and redirect to thank you page
-          clearCart();
-          navigate(`/thank-you?orderId=${response.razorpay_order_id || orderId}&amount=${amount}`);
         },
         (error) => {
           // Payment failed
