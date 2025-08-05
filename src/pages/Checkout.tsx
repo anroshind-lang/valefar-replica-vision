@@ -56,7 +56,7 @@ const Checkout = () => {
       // Initiate Razorpay payment
       await initiateRazorpayPayment(
         {
-          amount,
+          amount: amount * 100, // Convert to paisa for Razorpay
           currency: 'INR',
           orderId,
           customerName: `${formData.firstName} ${formData.lastName}`,

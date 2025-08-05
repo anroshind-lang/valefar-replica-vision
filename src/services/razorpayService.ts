@@ -1,7 +1,7 @@
 // Razorpay Payment Integration Service
 
 // TODO: Replace with your actual Razorpay Test Key
-const RAZORPAY_KEY_ID = 'rzp_test_YOUR_KEY_HERE'; // Replace with your Razorpay Test Key ID
+const RAZORPAY_KEY_ID = 'rzp_test_1234567890abcdef'; // Demo test key - replace with your actual key
 
 interface PaymentOptions {
   amount: number; // Amount in paisa (multiply by 100)
@@ -60,7 +60,7 @@ export const initiateRazorpayPayment = async (
     // Razorpay options
     const razorpayOptions = {
       key: RAZORPAY_KEY_ID,
-      amount: options.amount * 100, // Convert to paisa
+      amount: options.amount, // Amount already in paisa from checkout
       currency: options.currency,
       name: 'Valefar',
       description: `Order #${options.orderId}`,
@@ -83,6 +83,7 @@ export const initiateRazorpayPayment = async (
       modal: {
         ondismiss: () => {
           console.log('Payment modal closed');
+          onError(new Error('Payment cancelled by user'));
         },
       },
     };
