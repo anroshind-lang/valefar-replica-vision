@@ -1,9 +1,10 @@
 import emailjs from 'emailjs-com';
 
 // TODO: Replace these with your actual EmailJS credentials
-const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID'; // Replace with your EmailJS Service ID
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID'; // Replace with your EmailJS Template ID  
-const EMAILJS_USER_ID = 'YOUR_USER_ID'; // Replace with your EmailJS User ID
+// Get these from https://www.emailjs.com/
+const EMAILJS_SERVICE_ID = 'service_xxxxxxx'; // Your EmailJS Service ID
+const EMAILJS_TEMPLATE_ID = 'template_xxxxxxx'; // Your EmailJS Template ID  
+const EMAILJS_USER_ID = 'your_user_id_here'; // Your EmailJS Public Key
 
 interface OrderData {
   customerName: string;
@@ -21,23 +22,48 @@ interface OrderData {
 
 export const sendOrderConfirmationEmail = async (orderData: OrderData) => {
   try {
-    // Demo mode: Simulate successful email sending
-    console.log('Demo mode: Simulating email send...');
-    console.log('Order confirmation email would be sent to:', orderData.customerEmail);
-    console.log('Order details:', orderData);
-    
-    // Simulate email processing delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    console.log('Demo email sent successfully!');
-    return { 
-      success: true, 
-      result: { 
-        status: 200, 
-        text: 'Demo email sent successfully',
-        demo: true 
-      } 
+    // Check if EmailJS is properly configured
+    if (EMAILJS_SERVICE_ID === 'service_xxxxxxx' || 
+        EMAILJS_TEMPLATE_ID === 'template_xxxxxxx' || 
+        EMAILJS_USER_ID === 'your_user_id_here') {
+      
+      // Demo mode: Simulate successful email sending
+      console.log('Demo mode: EmailJS not configured with real credentials');
+      console.log('Order confirmation email would be sent to:', orderData.customerEmail);
+      console.log('To send real emails, configure EmailJS credentials in emailService.ts');
+      
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return { 
+        success: true, 
+        result: { status: 200, text: 'Demo mode - Configure EmailJS for real emails' } 
+      };
+    }
+
+    // Real EmailJS integration
+    emailjs.init(EMAILJS_USER_ID);
+
+    const templateParams = {
+      to_name: orderData.customerName,
+      to_email: orderData.customerEmail,
+      from_name: 'Valefar',
+      order_id: orderData.orderId,
+      order_items: orderData.items.map(item => 
+        `${item.name} (Qty: ${item.quantity}) - ₹${item.price.toLocaleString()}`
+      ).join('\n'),
+      total_amount: `₹${orderData.totalAmount.toLocaleString()}`,
+      shipping_address: orderData.shippingAddress,
+      phone: orderData.phone,
+      message: `Thank you for your order! Your order #${orderData.orderId} has been confirmed and will be processed soon.`,
     };
+
+    const result = await emailjs.send(
+      EMAILJS_SERVICE_ID,
+      EMAILJS_TEMPLATE_ID,
+      templateParams
+    );
+
+    console.log('Email sent successfully:', result);
+    return { success: true, result };
   } catch (error) {
     console.error('Error in demo email service:', error);
     return { success: false, error };
