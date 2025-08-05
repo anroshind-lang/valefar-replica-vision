@@ -50,55 +50,23 @@ export const initiateRazorpayPayment = async (
   onError: (error: any) => void
 ) => {
   try {
-    // Load Razorpay script
-    const isLoaded = await loadRazorpayScript();
+    // For demo purposes, simulate successful payment without Razorpay
+    console.log('Demo mode: Simulating successful payment');
     
-    if (!isLoaded) {
-      throw new Error('Failed to load Razorpay SDK');
-    }
-
-    // Razorpay options
-    const razorpayOptions = {
-      key: RAZORPAY_KEY_ID,
-      amount: options.amount, // Amount already in paisa from checkout
-      currency: options.currency,
-      name: 'Valefar',
-      description: `Order #${options.orderId}`,
-      order_id: options.orderId, // This should be created from your backend
-      handler: (response: RazorpayResponse) => {
-        console.log('Payment successful:', response);
-        onSuccess(response);
-      },
-      prefill: {
-        name: options.customerName,
-        email: options.customerEmail,
-        contact: options.customerPhone,
-      },
-      notes: {
-        address: options.customerAddress,
-      },
-      theme: {
-        color: '#000000', // Valefar brand color
-      },
-      modal: {
-        ondismiss: () => {
-          console.log('Payment modal closed');
-          onError(new Error('Payment cancelled by user'));
-        },
-      },
-    };
-
-    // Create and open Razorpay payment modal
-    const razorpay = new window.Razorpay(razorpayOptions);
+    // Simulate payment processing delay
+    setTimeout(() => {
+      const mockResponse: RazorpayResponse = {
+        razorpay_payment_id: `pay_${Date.now()}`,
+        razorpay_order_id: options.orderId,
+        razorpay_signature: `sig_${Date.now()}`
+      };
+      
+      console.log('Demo payment successful:', mockResponse);
+      onSuccess(mockResponse);
+    }, 2000); // 2 second delay to simulate processing
     
-    razorpay.on('payment.failed', (response: any) => {
-      console.error('Payment failed:', response.error);
-      onError(response.error);
-    });
-
-    razorpay.open();
   } catch (error) {
-    console.error('Error initiating payment:', error);
+    console.error('Error in demo payment:', error);
     onError(error);
   }
 };
