@@ -49,12 +49,18 @@ const Checkout = () => {
 
     setIsProcessing(true);
 
+    // Add timeout to prevent infinite processing
+    const timeoutId = setTimeout(() => {
+      setIsProcessing(false);
+      alert('Payment process timed out. Please try again.');
+    }, 30000); // 30 second timeout
+
     try {
       const orderId = generateOrderId();
       const amount = total;
 
       // Initiate Razorpay payment
-      await initiateRazorpayPayment(
+      initiateRazorpayPayment(
         {
           amount: amount * 100, // Convert to paisa for Razorpay
           currency: 'INR',
@@ -65,6 +71,9 @@ const Checkout = () => {
           customerAddress: `${formData.address}, ${formData.city}, ${formData.state} - ${formData.pincode}`,
         },
         async (response) => {
+          // Clear timeout
+          clearTimeout(timeoutId);
+          
           // Payment successful
           console.log('Payment successful:', response);
           
@@ -86,27 +95,39 @@ const Checkout = () => {
             
             // Clear cart and redirect to thank you page with email status
             clearCart();
+            setIsProcessing(false);
             navigate(`/thank-you?orderId=${response.razorpay_order_id || orderId}&amount=${amount}&emailSent=${emailResult.success}`);
           } catch (emailError) {
             console.error('Error sending email:', emailError);
             // Clear cart and redirect even if email fails
             clearCart();
-            navigate(`/thank-you?orderId=${response.razorpay_order_id || orderId}&amount=${amount}&emailSent=false`);
-          } finally {
             setIsProcessing(false);
+            navigate(`/thank-you?orderId=${response.razorpay_order_id || orderId}&amount=${amount}&emailSent=false`);
           }
         },
         (error) => {
-          // Payment failed
+          // Clear timeout
+          clearTimeout(timeoutId);
+          
+          // Payment failed or cancelled
           console.error('Payment failed:', error);
-          alert('Payment failed. Please try again.');
           setIsProcessing(false);
+          
+          if (error?.message?.includes('cancelled')) {
+            // User cancelled payment - no alert needed
+            return;
+          }
+          
+          alert('Payment failed. Please try again.');
         }
       );
     } catch (error) {
+      // Clear timeout
+      clearTimeout(timeoutId);
+      
       console.error('Error initiating payment:', error);
-      alert('Error initiating payment. Please try again.');
       setIsProcessing(false);
+      alert('Error initiating payment. Please try again.');
     }
   };
 
