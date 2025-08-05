@@ -21,33 +21,25 @@ interface OrderData {
 
 export const sendOrderConfirmationEmail = async (orderData: OrderData) => {
   try {
-    // Initialize EmailJS (only needed once in your app)
-    emailjs.init(EMAILJS_USER_ID);
-
-    const templateParams = {
-      to_name: orderData.customerName,
-      to_email: orderData.customerEmail,
-      from_name: 'Valefar',
-      order_id: orderData.orderId,
-      order_items: orderData.items.map(item => 
-        `${item.name} (Qty: ${item.quantity}) - ₹${item.price.toLocaleString()}`
-      ).join('\n'),
-      total_amount: `₹${orderData.totalAmount.toLocaleString()}`,
-      shipping_address: orderData.shippingAddress,
-      phone: orderData.phone,
-      message: `Thank you for your order! Your order #${orderData.orderId} has been confirmed and will be processed soon.`,
+    // Demo mode: Simulate successful email sending
+    console.log('Demo mode: Simulating email send...');
+    console.log('Order confirmation email would be sent to:', orderData.customerEmail);
+    console.log('Order details:', orderData);
+    
+    // Simulate email processing delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    console.log('Demo email sent successfully!');
+    return { 
+      success: true, 
+      result: { 
+        status: 200, 
+        text: 'Demo email sent successfully',
+        demo: true 
+      } 
     };
-
-    const result = await emailjs.send(
-      EMAILJS_SERVICE_ID,
-      EMAILJS_TEMPLATE_ID,
-      templateParams
-    );
-
-    console.log('Email sent successfully:', result);
-    return { success: true, result };
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error('Error in demo email service:', error);
     return { success: false, error };
   }
 };
